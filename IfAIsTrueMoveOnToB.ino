@@ -1,6 +1,7 @@
 #include <Servo.h>
 Servo myservo; 
 
+// Fortnite battle pass
 // setup button A
 
 const int buttonAPin = 2;
