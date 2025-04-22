@@ -1,57 +1,76 @@
 #include <Servo.h>
-Servo myservo; 
 
-// Fortnite battle pass
+Servo myservoBlood; 
+Servo myservoDoor2;
+Servo myservoDropper;
+Servo myservoTorpedo;
 
-// :D 💙💙💙
-// More Hearts 💙💙💙💙💙💙💙💙💙💙
-// Trying One more change 💙💙💙💙
+const int buttonPin = 2;
+const int buttonPinRoom2 = 3;
+const int buttonPinMarlinR2 = 4;
+const int buttonPinDoryR2 = 5;
 
-// setup button A
+int buttonPinVal;
+int buttonPinValRoom2;
+int buttonPinValMarlinR2;
+int buttonPinValDoryR2;
 
-const int buttonAPin = 2;
-int buttonAState = 0;
-int lastButtonAState = 0;
-bool A = false;
 
-//setup button B
-const int buttonBPin = 3;
-int buttonBState = 0;
-int lastButtonBState = 0;
-bool B = false;
+
 
 void setup() {
-  pinMode(buttonAPin, INPUT);
-  pinMode(buttonBPin, INPUT);
   Serial.begin(9600);
-  Serial.println("Start Part A");
+  myservoBlood.attach(9);
+  myservoDoor2.attach(6);
+  myservoDropper.attach(10);
+  myservoTorpedo.attach(11);
+  pinMode(buttonPin, INPUT);
+  myservoBlood.write(0);
+  myservoDoor2.write(0);
+  myservoDropper.write(0);
+  myservoTorpedo.write(90);
 }
 
+
+
+
 void loop() {
-  buttonAState = digitalRead(buttonAPin);
+  // The blood drop opens the first door
+  buttonPinVal = digitalRead(buttonPin);
+  Serial.println(" ");
+  Serial.println("Blood");
+  Serial.println(buttonPinVal);
+  Serial.println(" ");
 
-  // Read Button A
-  if (buttonAState != lastButtonAState) {
-    if (buttonAState == HIGH) {
-      A = true;
-      Serial.println("Start Part B");
+  if (buttonPinVal == 1) {
+      myservoBlood.write(90);
+
+//-------------------------------------------------
+// code for oppening the second door
+  buttonPinValRoom2 = digitalRead(buttonPinRoom2);
+  buttonPinValDoryR2 = digitalRead(buttonPinDoryR2);
+
+  Serial.println("Room2");
+  Serial.println(buttonPinValRoom2);
+  Serial.println(buttonPinValMarlinR2);
+  Serial.println(buttonPinValDoryR2);
+
+  if (buttonPinValDoryR2 == 1){  // Dory and Marlin close the door they came from
+    myservoBlood.write(0);
+    if (buttonPinValRoom2 == 1) { // they open the new door
+    myservoDropper.write(90);
     }
   }
+//-------------------------------------------------
+// code for revealing bruce the shark at the end
+  buttonPinValMarlinR2 = digitalRead(buttonPinMarlinR2);
 
-  // if A is true, read button B
-  if (A == true) {
-    buttonBState = digitalRead(buttonBPin);
-    if (buttonBState != lastButtonBState) {
-      if (buttonBState == HIGH) {
-      B = true;
-      }
-    }
+  if (buttonPinValMarlinR2 == 1){  // Dory and Marlin close the door they came from
+    myservoTorpedo.write(0); // servo flips Bruce
+    delay(7000);
+    myservoTorpedo.write(90);
   }
 
-  if (B == true) {
-    Serial.println("The End!");
-  }
 
-  lastButtonAState = buttonAState;
-  lastButtonBState = buttonBState;
+
 }
